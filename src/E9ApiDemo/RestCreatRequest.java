@@ -60,25 +60,25 @@ public class RestCreatRequest {
 
         /*********************************主表参数 start*****************************/
 
-        List<Map> mainList = new ArrayList<>();
+        JSONArray mainList = new JSONArray();
 
-        Map<String, String> fieldmap = new HashMap<>();
+        JSONObject fieldmap = new JSONObject();
         fieldmap.put("fieldName", "werks");//流程字段名
         fieldmap.put("fieldValue", "测试字段一");//流程字段值
         mainList.add(fieldmap);
 
-        Map<String, String> fieldmap2 = new HashMap<>();
+        JSONObject fieldmap2 = new JSONObject();
         fieldmap2.put("fieldName", "lgort");
         fieldmap2.put("fieldValue", "测试字段二");
         mainList.add(fieldmap2);
 
 
         //附件字段示例——以链接方式传参
-        Map<String, Object> fj_Path = new HashMap<>();
+        JSONObject fj_Path = new JSONObject();
         fj_Path.put("fieldName", "fjsc");
 
-        List<Map<String, String>> fjList = new ArrayList<>();
-        Map<String, String> fjmx = new HashMap<>();
+        List<JSONObject> fjList = new ArrayList<>();
+        JSONObject fjmx = new JSONObject();
         fjmx.put("filePath", "https://manwei01.oss-cn-hangzhou.aliyuncs.com/pro/2023/07/08/20230708211723UMISS9TY8.pdf");
         fjmx.put("fileName", "附件字段测试.pdf");
         fjList.add(fjmx);
@@ -88,11 +88,11 @@ public class RestCreatRequest {
 
 
         //附件字段示例——以文件流方式传参
-        Map<String, Object> fj_Base64 = new HashMap<>();
+        JSONObject fj_Base64 = new JSONObject();
         fj_Base64.put("fieldName", "wjl");
-        List<Map<String, String>> fjList_Base64 = new ArrayList<>();
+        List<JSONObject> fjList_Base64 = new ArrayList<>();
 
-        Map<String, String> fjmx2 = new HashMap<>();
+        JSONObject fjmx2 = new JSONObject();
         //一定要以base64 开头 ，还需要关注下产品那边
         fjmx2.put("filePath", "base64:" + fileToBase64("D:/weaver-file/文本文档.txt"));
         fjmx2.put("fileName", "文本文档.txt");
@@ -106,25 +106,25 @@ public class RestCreatRequest {
         /***********************************明细表参数 start*****************************/
         //明细表参数非必填，需根据实际情况添加
 
-        List<Map<String, Object>> dtlist = new ArrayList<>();
+        JSONArray dtlist = new JSONArray();
 
         /*  *********** 明细一 ******** */
-        Map<String, Object> dt1Map = new HashMap<>();
+        JSONObject dt1Map = new JSONObject();
         dt1Map.put("tableDBName", "formtable_main_8_dt1");//明细表表名
 
-        List<Map<String, Object>> workflowRequestTableRecords = new ArrayList<>();
+        List<JSONObject> workflowRequestTableRecords = new ArrayList<>();
 
         //第一行数据
-        List<Map<String, String>> workflowRequestTableFields1 = new ArrayList<>();
-        Map<String, Object> workflowRequestTableFieldsMap1 = new HashMap<>();
+        List<JSONObject> workflowRequestTableFields1 = new ArrayList<>();
+        JSONObject workflowRequestTableFieldsMap1 = new JSONObject();
 
-        Map<String, String> dtField11 = new HashMap<>();
+        JSONObject dtField11 = new JSONObject();
         dtField11.put("fieldName", "xm");
         dtField11.put("fieldValue", "张三");
         workflowRequestTableFields1.add(dtField11);
 
-        Map<String, String> dtField12 = new HashMap<>();
-        dtField12.put("fieldName", "rlzy");
+        JSONObject dtField12 = new JSONObject();
+        dtField12.put("fieldName", "lgort");
         dtField12.put("fieldValue", "7");
         workflowRequestTableFields1.add(dtField12);
 
@@ -133,16 +133,16 @@ public class RestCreatRequest {
         workflowRequestTableRecords.add(workflowRequestTableFieldsMap1);
 
         //第二行数据
-        List<Map<String, String>> workflowRequestTableFields2 = new ArrayList<>();
-        Map<String, Object> workflowRequestTableFieldsMap2 = new HashMap<>();
+        List<JSONObject> workflowRequestTableFields2 = new ArrayList<>();
+        JSONObject workflowRequestTableFieldsMap2 = new JSONObject();
 
-        Map<String, String> dtField21 = new HashMap<>();
+        JSONObject dtField21 = new JSONObject();
         dtField21.put("fieldName", "xm");
         dtField21.put("fieldValue", "张三三");
         workflowRequestTableFields2.add(dtField21);
 
-        Map<String, String> dtField22 = new HashMap<>();
-        dtField22.put("fieldName", "rlzy");
+        JSONObject dtField22 = new JSONObject();
+        dtField22.put("fieldName", "lgort");
         dtField22.put("fieldValue", "8");
         workflowRequestTableFields2.add(dtField22);
 
@@ -152,25 +152,26 @@ public class RestCreatRequest {
 
         dt1Map.put("workflowRequestTableRecords", workflowRequestTableRecords);
 
+
         dtlist.add(dt1Map);
 
 
         /*  ************* 明细二 ***************** */
-        Map<String, Object> dt2Map = new HashMap<>();
+        JSONObject dt2Map = new JSONObject();
         dt2Map.put("tableDBName", "formtable_main_8_dt2");//明细表表名
 
-        List<Map<String, Object>> workflowRequestTableRecords2 = new ArrayList<>();
+        List<JSONObject> workflowRequestTableRecords2 = new ArrayList<>();
 
         //第一行数据
-        List<Map<String, String>> workflowRequestTableFields1_dt2 = new ArrayList<>();
-        Map<String, Object> workflowRequestTableFieldsMap1_dt2 = new HashMap<>();
+        List<JSONObject> workflowRequestTableFields1_dt2 = new ArrayList<>();
+        JSONObject workflowRequestTableFieldsMap1_dt2 = new JSONObject();
 
-        Map<String, String> dtField1_dt2 = new HashMap<>();
+        JSONObject dtField1_dt2 = new JSONObject();
         dtField1_dt2.put("fieldName", "wb");
         dtField1_dt2.put("fieldValue", "测试");
         workflowRequestTableFields1_dt2.add(dtField1_dt2);
 
-        Map<String, String> dtField2_dt2 = new HashMap<>();
+        JSONObject dtField2_dt2 = new JSONObject();
         dtField2_dt2.put("fieldName", "rlzy");
         dtField2_dt2.put("fieldValue", "8");
         workflowRequestTableFields1_dt2.add(dtField2_dt2);
@@ -180,15 +181,15 @@ public class RestCreatRequest {
         workflowRequestTableRecords2.add(workflowRequestTableFieldsMap1_dt2);
 
         //第二行数据
-        List<Map<String, String>> workflowRequestTableFields2_dt2 = new ArrayList<>();
-        Map<String, Object> workflowRequestTableFieldsMap2_dt2 = new HashMap<>();
+        List<JSONObject> workflowRequestTableFields2_dt2 = new ArrayList<>();
+        JSONObject workflowRequestTableFieldsMap2_dt2 = new JSONObject();
 
-        Map<String, String> dtField21_dt2 = new HashMap<>();
+        JSONObject dtField21_dt2 = new JSONObject();
         dtField21_dt2.put("fieldName", "wb");
         dtField21_dt2.put("fieldValue", "测试第二行");
         workflowRequestTableFields2_dt2.add(dtField21_dt2);
 
-        Map<String, String> dtField22_dt2 = new HashMap<>();
+        JSONObject dtField22_dt2 = new JSONObject();
         dtField22_dt2.put("fieldName", "rlzy");
         dtField22_dt2.put("fieldValue", "7");
         workflowRequestTableFields2_dt2.add(dtField22_dt2);
@@ -209,18 +210,12 @@ public class RestCreatRequest {
         otherParams.put("isnextflow ", "1");//新建流程是否默认提交到第二节点，可选值为[0 ：不流转 1：流转 (默认)]
         otherParams.put("delReqFlowFaild ", "1");//新建流程失败是否默认删除流程，可选值为[0 ：不删除 1：删除 (默认)]
 
-        System.out.println("mainList.toString()---" + mainList.toString());
-        System.out.println("dtlist.toString()---" + dtlist.toString());
-        System.out.println("otherParams.toString()---" + otherParams.toString());
-
-        JSONArray mainArr = JSONArray.fromObject(mainList);
-        JSONArray dtArr = JSONArray.fromObject(dtlist);
 
         Map<String, String> inMap = new HashMap<>();
         inMap.put("requestName", "测试创建流程" + TimeUtil.getCurrentTimeString());//流程标题
         inMap.put("workflowId", "6");//流程id
-        inMap.put("mainData", mainArr.toString());//主表参数
-        inMap.put("detailData", dtArr.toString());//明细表参数，非必填,无明细表可省略该行
+        inMap.put("mainData", mainList.toString());//主表参数
+        inMap.put("detailData", dtlist.toString());//明细表参数，非必填,无明细表可省略该行
         inMap.put("otherParams", otherParams.toString());//其他参数,非必填
         inMap.put("remark", "测试签字意见");//签字意见，默认值流程默认意见若未设置则为空,非必填
 
