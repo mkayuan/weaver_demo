@@ -51,56 +51,61 @@ public class ActionCRM_SJ extends BaseBean implements Action {
                 map.put(Util.null2String(recordSet.getString("jkzd")), Util.null2String(recordSet.getString("oazd")));
             }
 
+            //客户
+            Map<String, String> map1 = new HashMap<>();
             sql = "select * from uf_srmapi_dt1 where iscustomer ='1' and  mainid = " + billid;
             recordSet.execute(sql);
             if (recordSet.next()) {
                 String jkzd_sj = Util.null2String(recordSet.getString("jkzd"));
                 String oazd = Util.null2String(recordSet.getString("oazd"));
+                map1.put(jkzd_sj, oazd);
+            }
 
+            //商机
+            Map<String, String> map2 = new HashMap<>();
+            sql = "select * from uf_srmapi_dt1 where iscustomer ='2' and  mainid = " + billid;
+            recordSet.execute(sql);
+            if (recordSet.next()) {
+                String jkzd_sj = Util.null2String(recordSet.getString("jkzd"));
+                String oazd = Util.null2String(recordSet.getString("oazd"));
+                map2.put(jkzd_sj, oazd);
+            }
 
-                sql = "select * from " + tablename + "  where requestid=?";
-                recordSet.executeQuery(sql, requestid);
-                recordSet.next();
+            sql = "select * from " + tablename + "  where requestid=?";
+            recordSet.executeQuery(sql, requestid);
+            recordSet.next();
 
-                JSONArray jsonArray = new JSONArray();
-                RecordSet rs = new RecordSet();
-                sql = "select sjid from CRM_SellChance where customerid ='" + Util.null2String(recordSet.getString(oazd)) + "'";
-                rs.execute(sql);
-                while (rs.next()) {
-                    JSONObject json = new JSONObject();
-                    for (String jkzd : map.keySet()) {
-                        json.put(jkzd, Util.null2String(recordSet.getString(map.get(jkzd))));
-                    }
+            JSONObject json = new JSONObject();
+            for (String jkzd : map.keySet()) {
+                json.put(jkzd, Util.null2String(recordSet.getString(map.get(jkzd))));
+            }
 
-                    json.put(jkzd_sj, Util.null2String(rs.getString("sjid")));
-                    jsonArray.add(json);
-                }
+            for (String jkzd : map1.keySet()) {
+                json.put(jkzd, customer(Util.null2String(recordSet.getString(map1.get(jkzd)))));
+            }
 
-                JSONObject object = new JSONObject();
-                object.put("batchData", jsonArray);
+            for (String jkzd : map2.keySet()) {
+                json.put(jkzd, Sell(Util.null2String(recordSet.getString(map2.get(jkzd)))));
+            }
 
-                String token = getTokken(urlToken);
-                logger.info("token---" + token);
-                logger.info("object.toJSONString()---" + object.toJSONString());
-                String result = HttpRequest.patch(url)
-                        .header("Authorization", token)
-                        .body(object.toJSONString())
-                        .timeout(20000)//超时，毫秒
-                        .execute().body();
+            String token = getTokken(urlToken);
+            logger.info("token---" + token);
+            logger.info("object.toJSONString()---" + json.toJSONString());
+            String result = HttpRequest.patch(url)
+                    .header("Authorization", token)
+                    .body(json.toJSONString())
+                    .timeout(20000)//超时，毫秒
+                    .execute().body();
 
-                logger.info("result---" + result);
-                JSONObject jsonObject = JSONObject.parseObject(result);
-                if (!Util.null2String(jsonObject.getString("code")).equals("200")) {
-                    manager.setMessageid(requestid);
-                    manager.setMessagecontent(Util.null2String(jsonObject.getString("msg")));
-                    return "0";
-                }
-                return "1";
-            } else {
+            logger.info("result---" + result);
+            JSONObject jsonObject = JSONObject.parseObject(result);
+            if (!Util.null2String(jsonObject.getString("code")).equals("200")) {
                 manager.setMessageid(requestid);
-                manager.setMessagecontent("未配置建模表接口id字段");
+                manager.setMessagecontent(Util.null2String(jsonObject.getString("msg")));
                 return "0";
             }
+            return "1";
+
         } else {
             manager.setMessageid(requestid);
             manager.setMessagecontent("未配置建模表接口信息");
@@ -117,12 +122,21 @@ public class ActionCRM_SJ extends BaseBean implements Action {
         return Util.null2String(jsonObject.getString("access_token"));
     }
 
-    private String customer(String val) {
+    private String Sell(String val) {
         RecordSet recordSet = new RecordSet();
         String sql;
-        sql = "select sjid from CRM_SellChance where customerid ='" + val + "'";
+        sql = "select sjid from CRM_SellChance where id ='" + val + "'";
         recordSet.execute(sql);
         recordSet.next();
         return Util.null2String(recordSet.getString("sjid"));
+    }
+
+    private String customer(String val) {
+        RecordSet recordSet = new RecordSet();
+        String sql;
+        sql = "select name from CRM_CustomerInfo where  id='" + val + "'";
+        recordSet.execute(sql);
+        recordSet.next();
+        return Util.null2String(recordSet.getString("name"));
     }
 }
