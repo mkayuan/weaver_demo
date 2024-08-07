@@ -62,14 +62,12 @@ public class ActionCRM_SJ extends BaseBean implements Action {
             }
 
             //商机
-            Map<String, String> map2 = new HashMap<>();
+
             sql = "select * from uf_srmapi_dt1 where iscustomer ='2' and  mainid = " + billid;
             recordSet.execute(sql);
-            if (recordSet.next()) {
-                String jkzd_sj = Util.null2String(recordSet.getString("jkzd"));
-                String oazd = Util.null2String(recordSet.getString("oazd"));
-                map2.put(jkzd_sj, oazd);
-            }
+            recordSet.next();
+            String jkzd_sj = Util.null2String(recordSet.getString("jkzd"));
+            String oazd = Util.null2String(recordSet.getString("oazd"));
 
             sql = "select * from " + tablename + "  where requestid=?";
             recordSet.executeQuery(sql, requestid);
@@ -84,16 +82,22 @@ public class ActionCRM_SJ extends BaseBean implements Action {
                 json.put(jkzd, customer(Util.null2String(recordSet.getString(map1.get(jkzd)))));
             }
 
-            for (String jkzd : map2.keySet()) {
-                json.put(jkzd, Sell(Util.null2String(recordSet.getString(map2.get(jkzd)))));
-            }
+            String sjid = Sell(Util.null2String(recordSet.getString(oazd)));
+//            json.put(jkzd_sj, Long.parseLong(sjid));
 
             String token = getTokken(urlToken);
             logger.info("token---" + token);
-            logger.info("object.toJSONString()---" + json.toJSONString());
-            String result = HttpRequest.patch(url)
+
+
+            JSONObject object = new JSONObject();
+            object.put("data", json);
+            logger.info("object.toJSONString()---" + object.toJSONString());
+
+            String url_ = url + "/" + sjid;
+            logger.info("url_---" + url_);
+            String result = HttpRequest.patch(url_)
                     .header("Authorization", token)
-                    .body(json.toJSONString())
+                    .body(object.toJSONString())
                     .timeout(20000)//超时，毫秒
                     .execute().body();
 
