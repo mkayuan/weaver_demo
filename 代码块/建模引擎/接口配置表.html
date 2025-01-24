@@ -1,0 +1,14 @@
+<script>
+    function ActionSecondApi() {
+        var fieldid1 = ModeForm.convertFieldNameToId("lcid");
+        var fieldid2 = ModeForm.convertFieldNameToId("xzjk");
+        var fieldid3 = ModeForm.convertFieldNameToId("csid");
+
+        var fieldvalue1 = ModeForm.getFieldValue(fieldid1);
+        var fieldvalue2 = ModeForm.getFieldValue(fieldid2);
+        var fieldvalue3 = ModeForm.getFieldValue(fieldid3);
+
+        window.open("/weaverjn/service/ActionSecondApi.jsp?xzjk=" + fieldvalue2 + "&workflowid=" + fieldvalue1 + "&requestid=" + fieldvalue3);
+
+    }
+</script>
