@@ -1,4 +1,4 @@
-package weaverjn.util;
+package SecondDev.util;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -18,35 +18,44 @@ import java.util.Map;
 
 public class RequestBodySecondUtil {
 
-    private String uftablename = "uf_ActionSecondApi";
-    private String url = "";
+    private String uftablename = "uf_ActionSecondApi";//默认建模配置表表名
+    private String url = "";//接口请求地址
     private String mainid = "";
-    private String fhzd = "";
-    private String cgbs = "";
+    private String fhzd = "";//接口返回标识字段
+    private String cgbs = "";//返回标识字段对应成功标识
+    private int log = 0;//默认打印日志
 
+    /**
+     * 配置表不为默认值时获取配置信息
+     * @param tablename 建模配置表表名
+     * @param xzjk 选择接口下拉框对应id
+     * @param workflowid 流程id
+     * */
     public RequestBodySecondUtil(String tablename, String xzjk, String workflowid) {
         this.uftablename = tablename;
         RecordSet recordSet = new RecordSet();
         String sql;
-        sql = "select id,url,fhzd,cgbs from " + this.uftablename + "  where xzjk=? and lcid = ?";
+        sql = "select id,url,fhzd,cgbs,log from " + this.uftablename + "  where xzjk=? and lcid = ?";
         recordSet.executeQuery(sql, xzjk, workflowid);
         recordSet.next();
         this.url = Util.null2String(recordSet.getString("url"));
         this.mainid = Util.null2String(recordSet.getString("id"));
         this.fhzd = Util.null2String(recordSet.getString("fhzd"));
         this.cgbs = Util.null2String(recordSet.getString("cgbs"));
+        this.log = Util.getIntValue(recordSet.getString("log"));
     }
 
     public RequestBodySecondUtil(String xzjk, String workflowid) {
         RecordSet recordSet = new RecordSet();
         String sql;
-        sql = "select id,url,fhzd,cgbs from " + this.uftablename + "  where xzjk=? and lcid = ?";
+        sql = "select id,url,fhzd,cgbs,log from " + this.uftablename + "  where xzjk=? and lcid = ?";
         recordSet.executeQuery(sql, xzjk, workflowid);
         recordSet.next();
         this.url = Util.null2String(recordSet.getString("url"));
         this.mainid = Util.null2String(recordSet.getString("id"));
         this.fhzd = Util.null2String(recordSet.getString("fhzd"));
         this.cgbs = Util.null2String(recordSet.getString("cgbs"));
+        this.log = Util.getIntValue(recordSet.getString("log"));
     }
 
     public String getCgbs() {
@@ -61,6 +70,14 @@ public class RequestBodySecondUtil {
         return url;
     }
 
+    public int getLog() {
+        return Math.max(log, 0);
+    }
+
+    /**
+     * 配置表生成接口头参数
+     *
+     * */
     public Map<String, List<String>> getHeaders() {
         RecordSet recordSet = new RecordSet();
         Map<String, List<String>> headers = new HashMap<>();
@@ -74,6 +91,14 @@ public class RequestBodySecondUtil {
         return headers;
     }
 
+    /**
+     * 配置表生成接口body参数
+     * @param fjd 父节点
+     * @param mapMain 流程主表所有字段
+     * @param tablename 流程表表名
+     * @param billid 流程数据id
+     *
+     * */
     public JSONObject requestUtil(String fjd, Map<String, String> mapMain, String tablename, String billid) {
         JSONObject jsonObject = new JSONObject();
         RecordSet recordSet = new RecordSet();

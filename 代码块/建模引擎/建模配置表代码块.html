@@ -1,5 +1,14 @@
 <script>
-    function ActionSecondApi() {
+    jQuery().ready(function () {
+        var fieldid = ModeForm.convertFieldNameToId("csbw");
+
+        ModeForm.changeFieldValue(fieldid, {
+            value: "",
+            showhtml: '<input type="button" id="csbw" value="测试报文" title="测试报文" class="ant-btn ant-btn-primary csbw" style=" margin-right: 5px; max-width: 200px; max-height: 80px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; " onclick="myFunction();">'
+        });
+    });
+
+    function myFunction() {
         var fieldid1 = ModeForm.convertFieldNameToId("lcid");
         var fieldid2 = ModeForm.convertFieldNameToId("xzjk");
         var fieldid3 = ModeForm.convertFieldNameToId("csid");
@@ -9,6 +18,5 @@
         var fieldvalue3 = ModeForm.getFieldValue(fieldid3);
 
         window.open("/weaverjn/service/ActionSecondApi.jsp?xzjk=" + fieldvalue2 + "&workflowid=" + fieldvalue1 + "&requestid=" + fieldvalue3);
-
     }
 </script>
